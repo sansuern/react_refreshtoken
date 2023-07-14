@@ -1,20 +1,18 @@
 import React, { useRef } from "react";
 import "./index.css";
-import useRefreshtoken from "./useRefreshtoken";
-import useAxiosPrivate from "./useAxiosPrivate";
 import axios from "axios";
+import instance from "./v2/api";
+
 export default function App() {
   const form = useRef(null);
-  const refresh = useRefreshtoken();
-  const axiosPrivate = useAxiosPrivate();
 
   const sesstion = JSON.parse(sessionStorage.getItem("token"));
 
-  const access_token = sesstion?.tokens?.access?.token;
-  const refresh_token = sesstion?.tokens?.refresh?.token;
-  const id = sesstion?.user?.id;
-  const company = sesstion?.user?.company_user_map[0]?.company.id;
-  const store = sesstion?.user?.company_user_map[0]?.company.store[0]?.id;
+  const access_token = sesstion.tokens.access.token;
+  const refresh_token = sesstion.tokens.refresh.token;
+  const id = sesstion.user.id;
+  const company = sesstion.user.company_user_map[0].company.id;
+  const store = sesstion.user.company_user_map[0].company.store[0].id;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -52,8 +50,8 @@ export default function App() {
         Authorization: "Bearer " + access_token,
       },
     };
-    const resonse = await axiosPrivate.request(config);
-    console.log(resonse);
+    const resonse = await instance.request(config);
+    console.log(resonse.data.data)
   };
 
   return (
@@ -63,7 +61,7 @@ export default function App() {
         user
         <input name="user" value="ceo"></input>
         password
-        <input name="password" value="ceo"></input>
+        <input name="password" value="A12345678"></input>
         <button type="submit">Submit</button>
       </form>
       <hr></hr>
